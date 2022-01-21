@@ -25,9 +25,18 @@ def detail(request, question_id):
 
 def answer_create(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    answer = Answer(question=question, content=request.POST.get('content'), create_date=timezone.now())
-    answer.save()
-    return redirect('board:detail', question_id=question.id)
+    if request.method == 'POST':
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.create_date = timezone.now()
+            answer.question=question
+            answer.save()
+            return redirect('board:index', question_id=question.id)
+    else:
+        form = AnswerForm()
+    context = {'question':question, 'form': form}
+    return render(request, 'board/q_form.html', context)
 
 def question_create(request):
     if request.method == 'POST':
@@ -47,6 +56,12 @@ def answer_create(request, question_id):
     if request.method == "POST":
         form = AnswerForm(request.POST)
         if form.is_valid():
-            answer=form.save(commit=False)
-            answer.cretate_date=timezone.now()
+            answer = form.save(commit=False)
+            answer.create_date = timezone.now()
             answer.question = question
+            answer.save()
+            return redirect('board:detail', question_id=question.id)
+    else:
+        form = AnswerForm()
+    context = {'question': question, 'form': form}
+    return render(request, 'board/detail.html', context)  

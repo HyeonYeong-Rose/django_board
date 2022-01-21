@@ -1,4 +1,4 @@
-from socket import formshare
+from socket import fromshare
 from django import forms
 from board.models import Question, Answer
 
