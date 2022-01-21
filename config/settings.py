@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'member', #member.apps.MemberConfig
     'board.apps.BoardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
